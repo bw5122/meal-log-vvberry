@@ -365,11 +365,25 @@ function renderMenu(visibleDishes) {
     { id: "dessert", title: "甜品", note: "饭后的甜味收尾。" }
   ];
 
-  const sectionHtml = sections.map((section) => {
-    const sectionDishes = visibleDishes.filter((dish) => menuSectionFor(dish) === section.id);
-    if (!sectionDishes.length) return "";
+  const visibleSections = sections.map((section) => ({
+    ...section,
+    dishes: visibleDishes.filter((dish) => menuSectionFor(dish) === section.id)
+  })).filter((section) => section.dishes.length);
 
-    const rows = sectionDishes.map((dish) => `
+  const indexHtml = visibleSections.map((section) => `
+    <a class="menu-index-link" href="#menu-section-${section.id}">
+      <span>${escapeHtml(section.title)}</span>
+      <strong>${section.dishes.length}</strong>
+    </a>
+  `).join("");
+
+  const sectionHtml = visibleSections.map((section) => {
+    const rows = section.dishes.map((dish) => {
+      const memoryText = dish.appearances.length > 1
+        ? `做过 ${dish.appearances.length} 次 · 最近 ${formatDate(dish.date)}`
+        : `${formatDate(dish.date)} · ${dish.mealTitle}`;
+
+      return `
         <article class="menu-item" data-id="${dish.id}" data-open-dish="${dish.id}" role="button" tabindex="0" aria-label="查看${escapeHtml(dish.name)}">
           <span class="menu-thumb" aria-hidden="true">
             <img src="${dishPath(dish.imageId)}" alt="${escapeHtml(dish.name)}">
@@ -379,18 +393,23 @@ function renderMenu(visibleDishes) {
               <span class="menu-name">${escapeHtml(dish.name)}</span>
               <span class="menu-cue" aria-hidden="true">›</span>
             </h3>
+            <p class="menu-detail">
+              <span>${escapeHtml(labelFor(dish.type))}</span>
+              <span>${escapeHtml(memoryText)}</span>
+            </p>
           </div>
         </article>
-      `).join("");
+      `;
+    }).join("");
 
     return `
-      <section class="menu-section" aria-label="${escapeHtml(section.title)}">
+      <section class="menu-section" id="menu-section-${section.id}" aria-label="${escapeHtml(section.title)}">
         <div class="menu-section-head">
           <div>
-            <p class="eyebrow">菜单分类</p>
             <h2>${escapeHtml(section.title)}</h2>
+            <p>${escapeHtml(section.note)}</p>
           </div>
-          <p>${escapeHtml(section.note)}</p>
+          <span>${section.dishes.length} 道</span>
         </div>
         <div class="menu-items">${rows}</div>
       </section>
@@ -399,12 +418,17 @@ function renderMenu(visibleDishes) {
 
   els.grid.innerHTML = `
     <div class="menu-board">
-      <div class="menu-cover">
+      <aside class="menu-aside" aria-label="菜单概览">
         <p class="eyebrow">鹿梅小馆</p>
         <h2>主厨菜单</h2>
         <p>从我们一起做过的饭里整理出的菜品。</p>
+        <nav class="menu-index" aria-label="菜单分类">
+          ${indexHtml}
+        </nav>
+      </aside>
+      <div class="menu-sections">
+        ${sectionHtml}
       </div>
-      ${sectionHtml}
     </div>
   `;
 }
