@@ -94,10 +94,10 @@ const meals = [
   {
     id: "IMG_1148",
     date: "2026-05-21",
-    title: "番茄牛肉炖菜",
-    tags: ["stew", "rice", "tofu", "vegetables"],
+    title: "罗宋汤",
+    tags: ["soup", "rice", "tofu", "vegetables"],
     dishes: [
-      { name: "番茄牛肉炖菜", type: "stew", group: "main" },
+      { name: "罗宋汤", type: "soup", group: "main" },
       { name: "蘑菇鸡肉", type: "mushroom", group: "protein" },
       { name: "蒜蓉菠菜", type: "vegetable", group: "side" },
       { name: "葱油嫩豆腐", type: "tofu", group: "side" },
@@ -120,10 +120,10 @@ const meals = [
   {
     id: "IMG_1193",
     date: "2026-05-26",
-    title: "番茄牛肉炖菜和炸茄夹",
-    tags: ["stew", "eggplant", "rice", "vegetables"],
+    title: "罗宋汤和炸茄夹",
+    tags: ["soup", "eggplant", "rice", "vegetables"],
     dishes: [
-      { name: "番茄牛肉炖菜", type: "stew", group: "main" },
+      { name: "罗宋汤", type: "soup", group: "main" },
       { name: "炸茄夹", type: "eggplant", group: "main" },
       { name: "炒青椒", type: "vegetable", group: "side" },
       { name: "西兰花青菜", type: "vegetable", group: "side" },
@@ -600,7 +600,7 @@ function normalizeDishKey(name) {
     "清蒸整鱼": "清蒸鱼",
     "steamedwholefish": "清蒸鱼",
     "steamedfish": "清蒸鱼",
-    "tomatobeefstew": "番茄牛肉炖菜",
+    "tomatobeefstew": "罗宋汤",
     "whiterice": "白米饭",
     "garlicnapacabbage": "蒜蓉白菜",
     "braisedporkribs": "红烧排骨"
