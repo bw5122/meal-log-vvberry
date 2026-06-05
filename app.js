@@ -369,30 +369,19 @@ function renderMenu(visibleDishes) {
     const sectionDishes = visibleDishes.filter((dish) => menuSectionFor(dish) === section.id);
     if (!sectionDishes.length) return "";
 
-    const rows = sectionDishes.map((dish) => {
-      const countText = dish.appearances.length > 1 ? `${dish.appearances.length} 次` : formatDate(dish.date);
-      return `
+    const rows = sectionDishes.map((dish) => `
         <article class="menu-item" data-id="${dish.id}">
           <button class="menu-thumb" type="button" data-open-dish="${dish.id}" aria-label="查看${escapeHtml(dish.name)}">
             <img src="${dishPath(dish.imageId)}" alt="${escapeHtml(dish.name)}">
           </button>
           <div class="menu-copy">
-            <div class="menu-line">
-              <h3>${escapeHtml(dish.name)}</h3>
-              <span>${escapeHtml(countText)}</span>
-            </div>
-            <p>${escapeHtml(dish.mealTitle)}</p>
-            <div class="tag-row">
-              <span class="tag">${escapeHtml(labelFor(dish.type))}</span>
-              ${dish.tags.slice(0, 2).map((tag) => `<span class="tag">${escapeHtml(labelFor(tag))}</span>`).join("")}
-            </div>
+            <h3>${escapeHtml(dish.name)}</h3>
           </div>
           <div class="menu-actions">
             <button class="menu-open" type="button" data-open-dish="${dish.id}">查看</button>
           </div>
         </article>
-      `;
-    }).join("");
+      `).join("");
 
     return `
       <section class="menu-section" aria-label="${escapeHtml(section.title)}">

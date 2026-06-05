@@ -61,6 +61,7 @@ button {
   width: 76px;
   height: 76px;
   flex: 0 0 76px;
+  border-radius: 999px;
   object-fit: contain;
 }
 
