@@ -1,57 +1,61 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dinner Log</title>
+    <title>鹿梅小馆</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <main class="shell">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">Vanessa kitchen</p>
-          <h1>Dinner Log</h1>
+        <div class="brand-lockup">
+          <img class="brand-logo" src="assets/brand/lumei-logo.png" alt="" aria-hidden="true">
+          <div>
+            <p class="eyebrow">Vanessa kitchen</p>
+            <h1>鹿梅小馆</h1>
+          </div>
         </div>
         <button class="pick-button" id="pickDinner" type="button">
-          <span class="die" aria-hidden="true"></span>
-          <span>Pick dinner</span>
+          <span aria-hidden="true">随机</span>
+          <span>随机选菜</span>
         </button>
       </header>
 
-      <section class="dashboard" aria-label="Dinner archive">
-        <div class="stats" aria-label="Archive counts">
+      <nav class="mode-switch" aria-label="浏览模式">
+        <button class="mode-button is-active" type="button" data-mode="dishes">主厨菜单</button>
+        <button class="mode-button" type="button" data-mode="meals">晚餐日志</button>
+      </nav>
+
+      <section class="dashboard" aria-label="晚餐档案">
+        <div class="stats" aria-label="档案统计">
           <div>
             <strong id="mealCount">0</strong>
-            <span>meals</span>
+            <span>顿饭</span>
           </div>
           <div>
             <strong id="dishCount">0</strong>
-            <span>dishes</span>
-          </div>
-          <div>
-            <strong id="favoriteCount">0</strong>
-            <span>saved</span>
+            <span>道菜</span>
           </div>
         </div>
 
         <div class="controls">
           <label class="search-field">
             <span aria-hidden="true"></span>
-            <input id="searchInput" type="search" placeholder="Search dishes, tags, dates">
+            <input id="searchInput" type="search" placeholder="搜索菜名、标签、日期">
           </label>
-          <div class="filters" id="filters" role="tablist" aria-label="Meal filters"></div>
+          <div class="filters" id="filters" role="tablist" aria-label="筛选"></div>
         </div>
       </section>
 
       <section class="choice-panel" id="choicePanel" hidden aria-live="polite"></section>
 
-      <section class="meal-grid" id="mealGrid" aria-label="Meals"></section>
-      <p class="empty-state" id="emptyState" hidden>No matches right now.</p>
+      <section class="item-grid" id="itemGrid" aria-label="菜品档案"></section>
+      <p class="empty-state" id="emptyState" hidden>没有找到匹配项。</p>
     </main>
 
     <dialog class="meal-dialog" id="mealDialog">
-      <button class="dialog-close" id="dialogClose" type="button" aria-label="Close details">&times;</button>
+      <button class="dialog-close" id="dialogClose" type="button" aria-label="关闭详情">&times;</button>
       <div class="dialog-body" id="dialogBody"></div>
     </dialog>
 

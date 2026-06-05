@@ -1,8 +1,7 @@
-# Dinner Log
+# 晚餐日志
 
-Static dinner menu archive for GitHub Pages.
+用于记录我们一起做过的饭和菜品的静态网站。
 
 ## GitHub Pages
 
-Deploy from the `main` branch, root folder.
-
+从 `main` 分支的根目录发布。
