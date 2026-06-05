@@ -6,7 +6,7 @@ const meals = [
     tags: ["steak", "date-night", "vegetables", "western"],
     dishes: [
       { name: "肋眼牛排", type: "steak", group: "protein" },
-      { name: "烤小土豆", type: "potato", group: "side" },
+      { name: "烤小土豆", type: "potato", group: "staple" },
       { name: "炒蘑菇", type: "mushroom", group: "side" },
       { name: "西兰花", type: "vegetable", group: "side" },
       { name: "小番茄沙拉", type: "salad", group: "side" }
@@ -120,11 +120,11 @@ const meals = [
   {
     id: "IMG_1193",
     date: "2026-05-26",
-    title: "番茄牛肉炖菜和炸鸡",
-    tags: ["stew", "chicken", "rice", "vegetables"],
+    title: "番茄牛肉炖菜和炸茄夹",
+    tags: ["stew", "eggplant", "rice", "vegetables"],
     dishes: [
       { name: "番茄牛肉炖菜", type: "stew", group: "main" },
-      { name: "炸鸡", type: "chicken", group: "protein" },
+      { name: "炸茄夹", type: "eggplant", group: "main" },
       { name: "炒青椒", type: "vegetable", group: "side" },
       { name: "西兰花青菜", type: "vegetable", group: "side" },
       { name: "白米饭", type: "rice", group: "side" }
@@ -359,7 +359,7 @@ function renderMenu(visibleDishes) {
   const sections = [
     { id: "main", title: "主菜", note: "肉类、海鲜、豆腐和炖菜，适合作为一餐的核心。" },
     { id: "vegetable", title: "蔬菜", note: "青菜、菌菇、沙拉和清爽配菜。" },
-    { id: "staple", title: "主食", note: "米饭、面、炒饭、意面和饺子。" },
+    { id: "staple", title: "主食", note: "米饭、土豆、面、炒饭、意面和饺子。" },
     { id: "soup", title: "汤品", note: "适合搭配正餐的汤。" },
     { id: "side", title: "小菜", note: "豆腐、酱料和可以搭配主食的小盘。" },
     { id: "dessert", title: "甜品", note: "饭后的甜味收尾。" }
@@ -513,10 +513,10 @@ function showDialog() {
 function menuSectionFor(dish) {
   if (dish.group === "dessert" || dish.type === "cake") return "dessert";
   if (dish.type === "soup") return "soup";
-  if (["rice", "seafood-rice", "noodle", "pasta", "dumpling"].includes(dish.type)) return "staple";
+  if (["rice", "seafood-rice", "noodle", "pasta", "dumpling", "potato"].includes(dish.type)) return "staple";
   if (dish.group === "protein" || dish.group === "main") return "main";
   if (dish.type === "tofu" || (dish.group === "side" && dish.type === "stew")) return "side";
-  if (["vegetable", "salad", "mushroom", "potato"].includes(dish.type)) return "vegetable";
+  if (["vegetable", "salad", "mushroom"].includes(dish.type)) return "vegetable";
   if (["steak", "fish", "ribs", "chicken"].includes(dish.type)) return "main";
   return "side";
 }
@@ -543,6 +543,7 @@ function labelFor(value) {
     pasta: "意面",
     "seafood-rice": "海鲜饭",
     chicken: "鸡肉",
+    eggplant: "茄夹",
     rice: "米饭",
     noodle: "面食",
     cake: "蛋糕",
