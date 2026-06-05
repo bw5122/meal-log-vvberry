@@ -175,6 +175,10 @@ const allDishes = meals.flatMap((meal) =>
   }))
 );
 
+const preferredMenuImages = {
+  "白米饭": "IMG_1182-4"
+};
+
 const menuDishes = buildMenuDishes(allDishes);
 
 const state = {
@@ -190,8 +194,6 @@ const els = {
   search: document.getElementById("searchInput"),
   mealCount: document.getElementById("mealCount"),
   dishCount: document.getElementById("dishCount"),
-  choicePanel: document.getElementById("choicePanel"),
-  pickDinner: document.getElementById("pickDinner"),
   emptyState: document.getElementById("emptyState"),
   dialog: document.getElementById("mealDialog"),
   dialogBody: document.getElementById("dialogBody"),
@@ -203,7 +205,7 @@ function photoPath(id, size = "thumbs") {
 }
 
 function dishPath(id) {
-  return `assets/dishes/${id}.jpg`;
+  return `assets/dishes-polished/${id}.jpg`;
 }
 
 function formatDate(dateString) {
@@ -278,7 +280,6 @@ function renderModeButtons() {
     button.setAttribute("aria-pressed", String(isActive));
   });
   els.search.placeholder = state.mode === "meals" ? "搜索晚餐、菜名、标签" : "搜索菜名、分类、日期";
-  els.pickDinner.querySelector("span:last-child").textContent = state.mode === "meals" ? "随机晚餐" : "随机选菜";
 }
 
 function renderFilters() {
@@ -299,7 +300,6 @@ function setMode(mode) {
   state.activeFilter = "all";
   state.query = "";
   els.search.value = "";
-  els.choicePanel.hidden = true;
   history.replaceState(null, "", mode === "meals" ? "#meals" : "#dishes");
   render();
 }
@@ -370,15 +370,15 @@ function renderMenu(visibleDishes) {
     if (!sectionDishes.length) return "";
 
     const rows = sectionDishes.map((dish) => `
-        <article class="menu-item" data-id="${dish.id}">
-          <button class="menu-thumb" type="button" data-open-dish="${dish.id}" aria-label="查看${escapeHtml(dish.name)}">
+        <article class="menu-item" data-id="${dish.id}" data-open-dish="${dish.id}" role="button" tabindex="0" aria-label="查看${escapeHtml(dish.name)}">
+          <span class="menu-thumb" aria-hidden="true">
             <img src="${dishPath(dish.imageId)}" alt="${escapeHtml(dish.name)}">
-          </button>
+          </span>
           <div class="menu-copy">
-            <h3>${escapeHtml(dish.name)}</h3>
-          </div>
-          <div class="menu-actions">
-            <button class="menu-open" type="button" data-open-dish="${dish.id}">查看</button>
+            <h3>
+              <span class="menu-name">${escapeHtml(dish.name)}</span>
+              <span class="menu-cue" aria-hidden="true">›</span>
+            </h3>
           </div>
         </article>
       `).join("");
@@ -405,46 +405,6 @@ function renderMenu(visibleDishes) {
         <p>从我们一起做过的饭里整理出的菜品。</p>
       </div>
       ${sectionHtml}
-    </div>
-  `;
-}
-
-function pickDinner() {
-  if (state.mode === "dishes") {
-    const visibleDishes = getVisibleDishes();
-    const pool = visibleDishes.length ? visibleDishes : menuDishes;
-    const dish = pool[Math.floor(Math.random() * pool.length)];
-    renderChoice({
-      title: dish.name,
-      subtitle: dish.appearances.length > 1 ? `做过 ${dish.appearances.length} 次` : `${dish.mealTitle} · ${formatDate(dish.date)}`,
-      imageSrc: dishPath(dish.imageId),
-      openAttr: `data-open-dish="${dish.id}"`
-    });
-    return;
-  }
-
-  const visibleMeals = getVisibleMeals();
-  const pool = visibleMeals.length ? visibleMeals : meals;
-  const meal = pool[Math.floor(Math.random() * pool.length)];
-  const mainDish = meal.dishes.find((dish) => dish.group === "main") || meal.dishes[0];
-  renderChoice({
-    title: mainDish.name,
-    subtitle: `${meal.title} · ${formatDate(meal.date)}`,
-    imageSrc: photoPath(meal.id),
-    openAttr: `data-open-meal="${meal.id}"`
-  });
-}
-
-function renderChoice(choice) {
-  els.choicePanel.hidden = false;
-  els.choicePanel.innerHTML = `
-    <div class="choice-card">
-      <img src="${choice.imageSrc}" alt="${escapeHtml(choice.title)}">
-      <div>
-        <h2>${escapeHtml(choice.title)}</h2>
-        <p>${escapeHtml(choice.subtitle)}</p>
-      </div>
-      <button type="button" ${choice.openAttr}>查看</button>
     </div>
   `;
 }
@@ -603,7 +563,10 @@ function buildMenuDishes(dishes) {
     }
   });
 
-  return [...byDish.values()];
+  return [...byDish.values()].map((dish) => ({
+    ...dish,
+    imageId: preferredMenuImages[dish.id] || dish.imageId
+  }));
 }
 
 function normalizeDishKey(name) {
@@ -638,6 +601,13 @@ els.filters.addEventListener("click", (event) => {
   if (button) setFilter(button.dataset.filter);
 });
 
+els.grid.addEventListener("keydown", (event) => {
+  const item = event.target.closest(".menu-item[data-open-dish]");
+  if (!item || !["Enter", " "].includes(event.key)) return;
+  event.preventDefault();
+  openDish(item.dataset.openDish);
+});
+
 els.search.addEventListener("input", (event) => {
   state.query = event.target.value.trim().toLowerCase();
   render();
@@ -658,7 +628,6 @@ document.addEventListener("click", (event) => {
 
 });
 
-els.pickDinner.addEventListener("click", pickDinner);
 els.dialogClose.addEventListener("click", () => els.dialog.close());
 els.dialog.addEventListener("click", (event) => {
   if (event.target === els.dialog) els.dialog.close();

@@ -81,35 +81,12 @@ h1 {
   letter-spacing: 0;
 }
 
-.pick-button,
 .mode-switch,
 .dashboard,
-.choice-card,
 .archive-card,
 .meal-dialog {
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
-}
-
-.pick-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  gap: 10px;
-  padding: 0 16px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  color: #ffffff;
-  background: var(--accent);
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.pick-button span:first-child {
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 0.78rem;
-  text-transform: uppercase;
 }
 
 .mode-switch {
@@ -246,39 +223,6 @@ h1 {
   background: var(--accent-soft);
 }
 
-.choice-panel {
-  margin-top: 18px;
-}
-
-.choice-card {
-  display: grid;
-  grid-template-columns: 116px 1fr auto;
-  gap: 16px;
-  align-items: center;
-  padding: 12px;
-  border-radius: 8px;
-  background: var(--surface);
-}
-
-.choice-card img {
-  width: 116px;
-  height: 82px;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
-.choice-card h2 {
-  margin: 0 0 5px;
-  font-size: 1.08rem;
-}
-
-.choice-card p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.choice-card button,
 .card-action,
 .dialog-action {
   min-height: 36px;
@@ -421,19 +365,60 @@ h1 {
 }
 
 .menu-item {
+  position: relative;
   display: grid;
-  grid-template-columns: 92px 1fr auto;
+  grid-template-columns: 110px minmax(0, 1fr);
   gap: 14px;
   align-items: center;
+  width: 100%;
   min-width: 0;
   padding: 15px 0;
   border-top: 1px solid var(--line);
+  border-radius: 8px;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.menu-cue {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  margin-left: 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 253, 248, 0.78);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.68;
+  transition: border-color 160ms ease, color 160ms ease, transform 160ms ease, background 160ms ease;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  outline: 0;
+  background: rgba(37, 95, 91, 0.045);
+}
+
+.menu-item:hover .menu-cue,
+.menu-item:focus-visible .menu-cue {
+  border-color: rgba(37, 95, 91, 0.24);
+  color: var(--accent);
+  background: #ffffff;
+  opacity: 1;
+  transform: translateX(2px);
 }
 
 .menu-thumb {
   display: block;
-  width: 92px;
-  height: 76px;
+  width: 110px;
+  height: 88px;
   overflow: hidden;
   padding: 0;
   border: 0;
@@ -448,7 +433,8 @@ h1 {
   transition: transform 160ms ease;
 }
 
-.menu-thumb:hover img {
+.menu-item:hover .menu-thumb img,
+.menu-item:focus-visible .menu-thumb img {
   transform: scale(1.04);
 }
 
@@ -457,29 +443,19 @@ h1 {
 }
 
 .menu-copy h3 {
+  display: flex;
+  align-items: center;
   margin: 0;
   overflow: hidden;
   font-size: 1.02rem;
   line-height: 1.18;
+}
+
+.menu-name {
+  min-width: 0;
+  overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.menu-actions {
-  display: grid;
-  gap: 8px;
-  justify-items: end;
-}
-
-.menu-open {
-  min-height: 32px;
-  padding: 0 10px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: #ffffff;
-  border-color: var(--accent);
-  background: var(--accent);
-  font-size: 0.8rem;
-  font-weight: 750;
+  white-space: nowrap;
 }
 
 .dish-chips,
@@ -622,7 +598,6 @@ h1 {
 
   .topbar,
   .dashboard,
-  .choice-card,
   .dialog-layout {
     grid-template-columns: 1fr;
   }
@@ -632,7 +607,6 @@ h1 {
     align-items: start;
   }
 
-  .pick-button,
   .mode-switch {
     width: 100%;
   }
@@ -664,23 +638,12 @@ h1 {
   }
 
   .menu-item {
-    grid-template-columns: 82px 1fr;
-  }
-
-  .menu-actions {
-    grid-column: 2;
-    display: flex;
-    justify-content: flex-start;
+    grid-template-columns: 96px minmax(0, 1fr);
   }
 
   .menu-thumb {
-    width: 82px;
-    height: 72px;
-  }
-
-  .choice-card img {
-    width: 100%;
-    height: 176px;
+    width: 96px;
+    height: 78px;
   }
 
   .dialog-photo,
@@ -715,15 +678,18 @@ h1 {
 
   .menu-item {
     grid-template-columns: 1fr;
+    align-items: end;
   }
 
   .menu-thumb {
+    grid-column: 1 / -1;
     width: 100%;
     height: 168px;
   }
 
-  .menu-actions {
-    grid-column: auto;
+  .menu-copy {
+    grid-column: 1;
+    min-height: 28px;
   }
 
   .card-footer {
